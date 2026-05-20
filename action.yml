@@ -1,6 +1,9 @@
 name: "Build Beet project"
 description: "Builds a beet project and provides exposed outputs to get the files"
 author: "Trplnr"
+branding:
+  icon: 'package'
+  color: 'red'
 runs:
   using: composite
   steps:

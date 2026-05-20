@@ -1,5 +1,5 @@
 name: "Build Beet project"
-description: "Builds a Beet project and provides zipped and unzipped output files"
+description: "Builds a beet project and provides exposed outputs to get the files"
 author: "Trplnr"
 runs:
   using: composite

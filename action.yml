@@ -1,0 +1,19 @@
+name: "Build Beet project"
+description: "Builds a Beet project and provides zipped and unzipped output files"
+author: "Trplnr"
+runs:
+  using: composite
+  steps:
+    - name: "Validate project"
+      shell: bash
+      run: node ${{ github.action_path }}/src/validate.js
+
+    - name: "Install beet and dependencies"
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: "Build Beet project"
+      shell: bash
+      run: node ${{ github.action_path }}/src/build.js

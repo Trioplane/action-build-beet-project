@@ -1,2 +1,2 @@
 # action-build-beet-project
-Builds a beet project and provides zipped and unzipped files
+Builds a beet project and provides exposed outputs to get the files

@@ -3,15 +3,8 @@ import * as github from "@actions/github"
 import * as fs from "fs"
 import * as path from "path"
 
-// check if theres a beet.json and requirements.txt
-// check if the requirements.txt has "beet"
-// if not, die
-
 try {
     const BEET_DIR = core.getInput('beet-dir')
-
-    // Yes, it supports .json, .yml, .yaml, and pyproject.toml - stoupy
-    // add in the future
     const PATH_TO = {
         REQUIREMENTS: path.join("requirements.txt"),
         BEETJSON: path.join(BEET_DIR, "beet.json"),

@@ -33046,10 +33046,6 @@ Octokit.plugin(restEndpointMethods, paginateRest).defaults(defaults);
 
 new Context();
 
-// read the beet.json to get name, version, output folder, dp folder, rp folder, etc...
-// build the project using beet
-// set the output to the name, version, output folder, dp folder, rp folder, etc...
-
 try {
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"];
     info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);

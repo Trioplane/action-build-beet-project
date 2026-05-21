@@ -7,7 +7,7 @@ branding:
 
 inputs:
   beet-dir:
-    description: 'The directory with the beet.json'
+    description: 'The directory with the Beet configuration file'
     required: false
     default: '.'
 

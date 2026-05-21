@@ -1,0 +1,10 @@
+name: "Test Trioplane/action-build-beet-project@v1.0.0-beta1"
+
+on: push
+
+jobs:
+    test_action:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Build Beet project
+              uses: Trioplane/action-build-beet-project@v1.0.0-beta1 

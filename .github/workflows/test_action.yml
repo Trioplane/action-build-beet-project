@@ -1,4 +1,4 @@
-name: "Test Trioplane/action-build-beet-project@v1.0.0-beta4"
+name: "Test Trioplane/action-build-beet-project@v1.0.0-beta5"
 
 on: workflow_call
 
@@ -7,6 +7,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Build Beet project
-              uses: Trioplane/action-build-beet-project@v1.0.0-beta4
+              uses: Trioplane/action-build-beet-project@v1.0.0-beta5
               with:
                   beet-dir: 'my_beet_dir'

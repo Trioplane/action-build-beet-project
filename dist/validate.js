@@ -3,7 +3,7 @@ import os__default, { EOL } from 'os';
 import 'crypto';
 import * as fs from 'fs';
 import { promises, existsSync, readFileSync } from 'fs';
-import 'path';
+import * as path from 'path';
 import http from 'http';
 import https from 'https';
 import 'net';
@@ -28068,6 +28068,19 @@ var ExitCode;
      */
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
+/**
+ * Gets the value of an input.
+ * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
+ * Returns an empty string if the value is not defined.
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   string
+ */
+function getInput(name, options) {
+    const val = process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '';
+    return val.trim();
+}
 //-----------------------------------------------------------------------
 // Results
 //-----------------------------------------------------------------------
@@ -32998,6 +33011,18 @@ new Context();
 // if not, die
 
 try {
+    const BEET_DIR = getInput('beet-dir');
+    const PATH_TO = {
+        REQUIREMENTS: path.join("requirements.txt"),
+        BEET: path.join(PROJECT_DIR, "beet.json"),
+    };
+
+    info(PATH_TO.REQUIREMENTS);
+    info(PATH_TO.BEET);
+
+    info("Checking for requirements.txt");
+    // if (!fs.readFileSync())
+
     info("ran validate.js");
 } catch (error) {
     setFailed(error.message);

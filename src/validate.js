@@ -19,17 +19,20 @@ try {
 
     core.info("Checking for requirements.txt")
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
-        core.setFailed(`${PATH_TO.REQUIREMENTS} does not exist.`)
-        process.exitCode = 1
+        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`)
+        core.setFailed(err)
+        throw err
     }
     
     core.info("Checking for requirements.txt")
     if (!fs.existsSync(PATH_TO.BEET)) {
-        core.setFailed(`${PATH_TO.BEET} does not exist.`)
-        process.exitCode = 1
+        const err = new Error(`${PATH_TO.BEET} does not exist.`)
+        core.setFailed(err)
+        throw err
     }
 
     core.info("ran validate.js")
 } catch (error) {
     core.setFailed(error.message)
+    process.exit(1)
 }

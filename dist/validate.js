@@ -33022,18 +33022,21 @@ try {
 
     info("Checking for requirements.txt");
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
-        setFailed(`${PATH_TO.REQUIREMENTS} does not exist.`);
-        process.exitCode = 1;
+        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`);
+        setFailed(err);
+        throw err
     }
     
     info("Checking for requirements.txt");
     if (!fs.existsSync(PATH_TO.BEET)) {
-        setFailed(`${PATH_TO.BEET} does not exist.`);
-        process.exitCode = 1;
+        const err = new Error(`${PATH_TO.BEET} does not exist.`);
+        setFailed(err);
+        throw err
     }
 
     info("ran validate.js");
 } catch (error) {
     setFailed(error.message);
+    process.exit(1);
 }
 //# sourceMappingURL=validate.js.map

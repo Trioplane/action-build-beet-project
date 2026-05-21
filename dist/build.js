@@ -1,9 +1,9 @@
 import * as os from 'os';
 import os__default, { EOL } from 'os';
-import 'crypto';
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import { promises, existsSync, readFileSync } from 'fs';
-import 'path';
+import path from 'path';
 import http from 'http';
 import https from 'https';
 import 'net';
@@ -152,6 +152,36 @@ function escapeProperty(s) {
         .replace(/\n/g, '%0A')
         .replace(/:/g, '%3A')
         .replace(/,/g, '%2C');
+}
+
+// For internal use, subject to change.
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function issueFileCommand(command, message) {
+    const filePath = process.env[`GITHUB_${command}`];
+    if (!filePath) {
+        throw new Error(`Unable to find environment variable for file command ${command}`);
+    }
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`Missing file at path: ${filePath}`);
+    }
+    fs.appendFileSync(filePath, `${toCommandValue(message)}${os.EOL}`, {
+        encoding: 'utf8'
+    });
+}
+function prepareKeyValueMessage(key, value) {
+    const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
+    const convertedValue = toCommandValue(value);
+    // These should realistically never happen, but just in case someone finds a
+    // way to exploit uuid generation let's not allow keys or values that contain
+    // the delimiter.
+    if (key.includes(delimiter)) {
+        throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
+    }
+    if (convertedValue.includes(delimiter)) {
+        throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
+    }
+    return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
 }
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -28068,6 +28098,21 @@ var ExitCode;
      */
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
+/**
+ * Sets the value of an output.
+ *
+ * @param     name     name of the output to set
+ * @param     value    value to store. Non-string values will be converted to a string via JSON.stringify
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setOutput(name, value) {
+    const filePath = process.env['GITHUB_OUTPUT'] || '';
+    if (filePath) {
+        return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value));
+    }
+    process.stdout.write(os.EOL);
+    issueCommand('set-output', { name }, toCommandValue(value));
+}
 //-----------------------------------------------------------------------
 // Results
 //-----------------------------------------------------------------------
@@ -33006,11 +33051,7 @@ new Context();
 // set the output to the name, version, output folder, dp folder, rp folder, etc...
 
 try {
-    const BEET_PROJECT_NAME = process.env["BEET_PROJECT_NAME"];
-    const BEET_PROJECT_VERSION = process.env["BEET_PROJECT_VERSION"];
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"];
-    info(`🔵 BEET_PROJECT_NAME: ${BEET_PROJECT_NAME}`);
-    info(`🔵 BEET_PROJECT_VERSION: ${BEET_PROJECT_VERSION}`);
     info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
 
     const beet = spawn('beet', ['build']);
@@ -33026,10 +33067,28 @@ try {
     const [code] = await once(beet, 'close');
     info(`🔵 child process exited with code ${code}`);
 
-    const dir = fs.readdirSync(BEET_PROJECT_OUTPUT);
-    info(dir);
+    const OUTPUT_DIR_CONTENTS = fs.readdirSync(BEET_PROJECT_OUTPUT);
+    const DATA_PACKS = [];
+    const RESOURCE_PACKS = [];
+    const UNKNOWN_FILES = [];
 
-    info("ran build.js");
+    for (const entry of OUTPUT_DIR_CONTENTS) {
+        const fullPath = path.join(BEET_PROJECT_OUTPUT, entry);
+        const stat = fs.statSync(fullPath);
+        const name = stat.isFile() ? path.parse(entry).name : entry;
+
+        if (name.endsWith('data_pack')) DATA_PACKS.push(fullPath);
+        else if (name.endsWith('resource_pack')) RESOURCE_PACKS.push(fullPath);
+        else UNKNOWN_FILES.push(fullPath);
+    }
+
+    info(`🔵 Data Packs: ${DATA_PACKS}`);
+    info(`🔵 Resource Packs: ${RESOURCE_PACKS}`);
+    info(`🔵 Unknown Files: ${UNKNOWN_FILES}`);
+
+    setOutput("data-packs", JSON.stringify(DATA_PACKS));
+    setOutput("resource-packs", JSON.stringify(RESOURCE_PACKS));
+    setOutput("unknown-files", JSON.stringify(UNKNOWN_FILES));
 } catch (error) {
     setFailed(error.message);
 }

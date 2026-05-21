@@ -11,6 +11,32 @@ inputs:
     required: false
     default: '.'
 
+outputs:
+  data-packs:
+    description: List of data packs built as a JSON array of paths
+    value: ${{ steps.build-beet-project.outputs.data-packs }}
+
+  resource-packs:
+    description: List of resource packs built as a JSON array of paths
+    value: ${{ steps.build-beet-project.outputs.resource-packs }}
+
+  unknown-files:
+    description: List of unknown files built as a JSON array of paths
+    value: ${{ steps.build-beet-project.outputs.unknown-files }}
+
+  beet-project-output:
+    description: The output directory of the built files
+    value: ${{ steps.read-beet-config.outputs.beet-project-output }}
+
+  beet-project-name:
+    description: The name of the Beet project
+    value: ${{ steps.read-beet-config.outputs.beet-project-name }}
+
+  beet-project-version:
+    description: The version of the Beet project
+    value: ${{ steps.read-beet-config.outputs.beet-project-version }}
+
+
 runs:
   using: composite
   steps:
@@ -36,10 +62,9 @@ runs:
         BEET_CONFIG_PATH: ${{ steps.validate-project.outputs.beet-config-path }}
 
     - name: "Build Beet project"
+      id: build-beet-project
       continue-on-error: false
       shell: bash
       run: node ${{ github.action_path }}/dist/build.js
       env:
-        BEET_PROJECT_NAME: ${{ steps.read-beet-config.outputs.name }}
-        BEET_PROJECT_VERSION: ${{ steps.read-beet-config.outputs.version }}
         BEET_PROJECT_OUTPUT: ${{ steps.read-beet-config.outputs.output }}

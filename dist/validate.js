@@ -33035,13 +33035,13 @@ try {
     }
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" });
+    info(requirementstxt);
     if (!requirementstxt.includes("beet")) {
         const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`);
         setFailed(err);
         throw err
     }
 
-    info(requirementstxt);
 
     info("ran validate.js");
 } catch (error) {

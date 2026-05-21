@@ -20,15 +20,15 @@ try {
     const beet = spawn('beet', ['build']);
 
     beet.stdout.on('data', (data) => {
-      core.info(`stdout: ${data}`);
+      core.info(`🔵 BEET | ${data}`);
     });
 
     beet.stderr.on('data', (data) => {
-      core.warning(`stderr: ${data}`);
+      core.warning(`⚠ BEET | ${data}`);
     });
 
     const [code] = await once(beet, 'close');
-    core.info(`child process exited with code ${code}`);
+    core.info(`🔵 child process exited with code ${code}`);
 
     const dir = fs.readdirSync(BEET_PROJECT_OUTPUT)
     core.info(dir)

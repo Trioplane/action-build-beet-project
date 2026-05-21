@@ -33016,15 +33016,15 @@ try {
     const beet = spawn('beet', ['build']);
 
     beet.stdout.on('data', (data) => {
-      info(`stdout: ${data}`);
+      info(`🔵 BEET | ${data}`);
     });
 
     beet.stderr.on('data', (data) => {
-      warning(`stderr: ${data}`);
+      warning(`⚠ BEET | ${data}`);
     });
 
     const [code] = await once(beet, 'close');
-    info(`child process exited with code ${code}`);
+    info(`🔵 child process exited with code ${code}`);
 
     const dir = fs.readdirSync(BEET_PROJECT_OUTPUT);
     info(dir);

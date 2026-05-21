@@ -30,7 +30,7 @@ import require$$5$2 from 'node:async_hooks';
 import require$$1$4 from 'node:console';
 import require$$1$5 from 'node:dns';
 import require$$5$3 from 'string_decoder';
-import 'child_process';
+import { exec } from 'child_process';
 import 'timers';
 
 // We use any as a valid input type
@@ -33001,10 +33001,14 @@ try {
     const BEET_PROJECT_NAME = process.env["BEET_PROJECT_NAME"];
     const BEET_PROJECT_VERSION = process.env["BEET_PROJECT_VERSION"];
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"];
+    info(`🔵 BEET_PROJECT_NAME: ${BEET_PROJECT_NAME}`);
+    info(`🔵 BEET_PROJECT_VERSION: ${BEET_PROJECT_VERSION}`);
+    info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
 
-    info(`BEET_PROJECT_NAME: ${BEET_PROJECT_NAME}`);
-    info(`BEET_PROJECT_VERSION: ${BEET_PROJECT_VERSION}`);
-    info(`BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
+    await exec('beet build');
+
+    const dir = fs.readdirSync(BEET_PROJECT_OUTPUT);
+    info(dir);
 
     info("ran build.js");
 } catch (error) {

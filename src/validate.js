@@ -9,13 +9,16 @@ import * as path from "path"
 
 try {
     const BEET_DIR = core.getInput('beet-dir')
+
+    // Yes, it supports .json, .yml, .yaml, and pyproject.toml - stoupy
+    // add in the future
     const PATH_TO = {
         REQUIREMENTS: path.join("requirements.txt"),
-        BEET: path.join(BEET_DIR, "beet.json"),
+        BEETJSON: path.join(BEET_DIR, "beet.json"),
+        BEETYAML: path.join(BEET_DIR, "beet.yaml"),
+        BEETYML: path.join(BEET_DIR, "beet.yml"),
+        BEETPYPROJECT: path.join(BEET_DIR, "pyproject.toml"),
     }
-
-    core.info(`🔵 requirements.txt is presumably at: ${PATH_TO.REQUIREMENTS}`)
-    core.info(`🔵 beet.json is presumably at: ${PATH_TO.BEET}`)
 
     core.info(`🟡 Checking for ${PATH_TO.REQUIREMENTS}`)
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
@@ -25,13 +28,20 @@ try {
     }
     core.info(`🟢 ${PATH_TO.REQUIREMENTS} exists`)
     
-    core.info(`🟡 Checking for ${PATH_TO.BEET}`)
-    if (!fs.existsSync(PATH_TO.BEET)) {
-        const err = new Error(`${PATH_TO.BEET} does not exist`)
+    const BEET_CONFIGS = [
+        PATH_TO.BEETJSON,
+        PATH_TO.BEETYAML,
+        PATH_TO.BEETYML,
+        PATH_TO.BEETPYPROJECT,
+    ]
+
+    const beetConfig = BEET_CONFIGS.find(configFile => fs.existsSync(configFile))
+    if (!beetConfig) {
+        const err = new Error(`No beet config file found in ${BEET_DIR}`)
         core.setFailed(err)
         throw err
     }
-    core.info(`🟢 ${PATH_TO.BEET} exists`)
+    core.info(`🟢 Found beet config at: ${beetConfig}`)
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" })
     if (!requirementstxt.includes("beet")) {
@@ -44,7 +54,7 @@ try {
     core.info("✅ Successfully validated")
 
     core.setOutput("requirements-txt-path", PATH_TO.REQUIREMENTS)
-    core.setOutput("beet-json-path", PATH_TO.BEET)
+    core.setOutput("beet-config-path", beetConfig)
 } catch (error) {
     core.setFailed(error)
     process.exit(1)

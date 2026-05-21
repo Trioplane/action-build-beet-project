@@ -26,15 +26,15 @@ outputs:
 
   beet-project-output:
     description: The output directory of the built files
-    value: ${{ steps.read-beet-config.outputs.beet-project-output }}
+    value: ${{ steps.read-beet-config.outputs.output }}
 
   beet-project-name:
     description: The name of the Beet project
-    value: ${{ steps.read-beet-config.outputs.beet-project-name }}
+    value: ${{ steps.read-beet-config.outputs.name }}
 
   beet-project-version:
     description: The version of the Beet project
-    value: ${{ steps.read-beet-config.outputs.beet-project-version }}
+    value: ${{ steps.read-beet-config.outputs.version }}
 
 
 runs:

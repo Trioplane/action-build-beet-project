@@ -7,8 +7,6 @@ import * as fs from "fs"
 // set the output to the name, version, output folder, dp folder, rp folder, etc...
 
 try {
-    
-
     core.info("ran build.js")
 } catch (error) {
     core.setFailed(error.message)

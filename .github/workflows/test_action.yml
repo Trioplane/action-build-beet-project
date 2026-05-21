@@ -1,4 +1,4 @@
-name: "Test Trioplane/action-build-beet-project@v1.0.0-beta2"
+name: "Test Trioplane/action-build-beet-project@v1.0.0-beta3"
 
 on: push
 
@@ -7,4 +7,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Build Beet project
-              uses: Trioplane/action-build-beet-project@v1.0.0-beta2 
+              uses: Trioplane/action-build-beet-project@v1.0.0-beta3 

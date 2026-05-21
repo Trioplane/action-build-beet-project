@@ -33036,6 +33036,10 @@ try {
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" });
     info(requirementstxt);
+
+    info(`includes beet: ${requirementstxt.includes("beet")}`);
+    info(`char codes: ${[...requirementstxt.slice(0, 5)].map(c => c.charCodeAt(0))}`);
+
     if (!requirementstxt.includes("beet")) {
         const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`);
         setFailed(err);

@@ -32,13 +32,13 @@ try {
     }
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" })
+    core.info(requirementstxt)
     if (!requirementstxt.includes("beet")) {
         const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`)
         core.setFailed(err)
         throw err
     }
 
-    core.info(requirementstxt)
 
     core.info("ran validate.js")
 } catch (error) {

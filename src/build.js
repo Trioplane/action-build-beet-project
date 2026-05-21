@@ -1,7 +1,9 @@
 import * as core from "@actions/core"
 import * as github from "@actions/github"
-import { exec } from "child_process"
+import { spawn } from "child_process"
+import { once } from "events"
 import * as fs from "fs"
+
 
 // read the beet.json to get name, version, output folder, dp folder, rp folder, etc...
 // build the project using beet
@@ -15,7 +17,18 @@ try {
     core.info(`🔵 BEET_PROJECT_VERSION: ${BEET_PROJECT_VERSION}`)
     core.info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`)
 
-    await exec('beet build')
+    const beet = spawn('beet', ['build']);
+
+    beet.stdout.on('data', (data) => {
+      core.info(`stdout: ${data}`);
+    });
+
+    beet.stderr.on('data', (data) => {
+      core.warning(`stderr: ${data}`);
+    });
+
+    const [code] = await once(beet, 'close');
+    core.info(`child process exited with code ${code}`);
 
     const dir = fs.readdirSync(BEET_PROJECT_OUTPUT)
     core.info(dir)

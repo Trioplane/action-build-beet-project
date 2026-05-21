@@ -17,19 +17,28 @@ try {
     core.info(PATH_TO.REQUIREMENTS)
     core.info(PATH_TO.BEET)
 
-    core.info("Checking for requirements.txt")
+    core.info(`Checking for ${PATH_TO.REQUIREMENTS}`)
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
         const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`)
         core.setFailed(err)
         throw err
     }
     
-    core.info("Checking for requirements.txt")
+    core.info(`Checking for ${PATH_TO.BEET}`)
     if (!fs.existsSync(PATH_TO.BEET)) {
         const err = new Error(`${PATH_TO.BEET} does not exist.`)
         core.setFailed(err)
         throw err
     }
+
+    const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" })
+    if (!requirementstxt.includes("beet")) {
+        const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`)
+        core.setFailed(err)
+        throw err
+    }
+
+    core.info(requirementstxt)
 
     core.info("ran validate.js")
 } catch (error) {

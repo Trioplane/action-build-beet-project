@@ -33020,19 +33020,28 @@ try {
     info(PATH_TO.REQUIREMENTS);
     info(PATH_TO.BEET);
 
-    info("Checking for requirements.txt");
+    info(`Checking for ${PATH_TO.REQUIREMENTS}`);
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
         const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`);
         setFailed(err);
         throw err
     }
     
-    info("Checking for requirements.txt");
+    info(`Checking for ${PATH_TO.BEET}`);
     if (!fs.existsSync(PATH_TO.BEET)) {
         const err = new Error(`${PATH_TO.BEET} does not exist.`);
         setFailed(err);
         throw err
     }
+
+    const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" });
+    if (!requirementstxt.includes("beet")) {
+        const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`);
+        setFailed(err);
+        throw err
+    }
+
+    info(requirementstxt);
 
     info("ran validate.js");
 } catch (error) {

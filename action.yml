@@ -15,6 +15,7 @@ runs:
   using: composite
   steps:
     - name: "Validate project"
+      id: validate-project
       shell: bash
       run: node ${{ github.action_path }}/dist/validate.js
 
@@ -23,7 +24,8 @@ runs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        REQUIREMENTS_TXT_PATH = ${{ steps.validate-project.outputs.requirements-txt-path }}
+        if [ -f $REQUIREMENTS_TXT_PATH ]; then pip install -r $REQUIREMENTS_TXT_PATH; fi
 
     - name: "Build Beet project"
       continue-on-error: false

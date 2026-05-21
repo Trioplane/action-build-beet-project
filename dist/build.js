@@ -8,7 +8,7 @@ import http from 'http';
 import https from 'https';
 import 'net';
 import require$$1 from 'tls';
-import events$1 from 'events';
+import events$1, { once } from 'events';
 import 'assert';
 import require$$6 from 'util';
 import require$$0$1 from 'node:assert';
@@ -30,7 +30,7 @@ import require$$5$2 from 'node:async_hooks';
 import require$$1$4 from 'node:console';
 import require$$1$5 from 'node:dns';
 import require$$5$3 from 'string_decoder';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import 'timers';
 
 // We use any as a valid input type
@@ -28089,6 +28089,14 @@ function error(message, properties = {}) {
     issueCommand('error', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 /**
+ * Adds a warning issue
+ * @param message warning issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
+ */
+function warning(message, properties = {}) {
+    issueCommand('warning', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
+/**
  * Writes info to log with console.log.
  * @param message info message
  */
@@ -33005,7 +33013,18 @@ try {
     info(`🔵 BEET_PROJECT_VERSION: ${BEET_PROJECT_VERSION}`);
     info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
 
-    await exec('beet build');
+    const beet = spawn('beet', ['build']);
+
+    beet.stdout.on('data', (data) => {
+      info(`stdout: ${data}`);
+    });
+
+    beet.stderr.on('data', (data) => {
+      warning(`stderr: ${data}`);
+    });
+
+    const [code] = await once(beet, 'close');
+    info(`child process exited with code ${code}`);
 
     const dir = fs.readdirSync(BEET_PROJECT_OUTPUT);
     info(dir);

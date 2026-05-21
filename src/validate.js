@@ -18,7 +18,16 @@ try {
     core.info(PATH_TO.BEET)
 
     core.info("Checking for requirements.txt")
-    // if (!fs.readFileSync())
+    if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
+        core.setFailed(`${PATH_TO.REQUIREMENTS} does not exist.`)
+        process.exitCode = 1
+    }
+    
+    core.info("Checking for requirements.txt")
+    if (!fs.existsSync(PATH_TO.BEET)) {
+        core.setFailed(`${PATH_TO.BEET} does not exist.`)
+        process.exitCode = 1
+    }
 
     core.info("ran validate.js")
 } catch (error) {

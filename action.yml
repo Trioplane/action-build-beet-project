@@ -19,11 +19,13 @@ runs:
       run: node ${{ github.action_path }}/dist/validate.js
 
     - name: "Install beet and dependencies"
+      continue-on-error: false
       shell: bash
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: "Build Beet project"
+      continue-on-error: false
       shell: bash
       run: node ${{ github.action_path }}/dist/build.js

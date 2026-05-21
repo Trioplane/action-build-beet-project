@@ -33017,37 +33017,34 @@ try {
         BEET: path.join(BEET_DIR, "beet.json"),
     };
 
-    info(PATH_TO.REQUIREMENTS);
-    info(PATH_TO.BEET);
+    info(`:blue_circle: requirements.txt is presumably at: ${PATH_TO.REQUIREMENTS}`);
+    info(`:blue_circle: beet.json is presumably at: ${PATH_TO.BEET}`);
 
-    info(`Checking for ${PATH_TO.REQUIREMENTS}`);
+    info(`:yellow_circle: Checking for ${PATH_TO.REQUIREMENTS}`);
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
-        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`);
+        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist`);
         setFailed(err);
         throw err
     }
+    info(`:green_circle: ${PATH_TO.REQUIREMENTS} exists`);
     
-    info(`Checking for ${PATH_TO.BEET}`);
+    info(`:yellow_circle: Checking for ${PATH_TO.BEET}`);
     if (!fs.existsSync(PATH_TO.BEET)) {
-        const err = new Error(`${PATH_TO.BEET} does not exist.`);
+        const err = new Error(`${PATH_TO.BEET} does not exist`);
         setFailed(err);
         throw err
     }
+    info(`:green_circle: ${PATH_TO.BEET} exists`);
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" });
-    info(requirementstxt);
-
-    info(`includes beet: ${requirementstxt.includes("beet")}`);
-    info(`char codes: ${[...requirementstxt.slice(0, 5)].map(c => c.charCodeAt(0))}`);
-
     if (!requirementstxt.includes("beet")) {
         const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`);
         setFailed(err);
         throw err
     }
+    info(`:green_circle: requirements.txt has beet`);
 
-
-    info("ran validate.js");
+    info(":white_check_mark: Successfully validated");
 } catch (error) {
     setFailed(error.message);
     process.exit(1);

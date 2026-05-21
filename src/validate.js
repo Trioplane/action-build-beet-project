@@ -14,37 +14,34 @@ try {
         BEET: path.join(BEET_DIR, "beet.json"),
     }
 
-    core.info(PATH_TO.REQUIREMENTS)
-    core.info(PATH_TO.BEET)
+    core.info(`:blue_circle: requirements.txt is presumably at: ${PATH_TO.REQUIREMENTS}`)
+    core.info(`:blue_circle: beet.json is presumably at: ${PATH_TO.BEET}`)
 
-    core.info(`Checking for ${PATH_TO.REQUIREMENTS}`)
+    core.info(`:yellow_circle: Checking for ${PATH_TO.REQUIREMENTS}`)
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
-        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist.`)
+        const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist`)
         core.setFailed(err)
         throw err
     }
+    core.info(`:green_circle: ${PATH_TO.REQUIREMENTS} exists`)
     
-    core.info(`Checking for ${PATH_TO.BEET}`)
+    core.info(`:yellow_circle: Checking for ${PATH_TO.BEET}`)
     if (!fs.existsSync(PATH_TO.BEET)) {
-        const err = new Error(`${PATH_TO.BEET} does not exist.`)
+        const err = new Error(`${PATH_TO.BEET} does not exist`)
         core.setFailed(err)
         throw err
     }
+    core.info(`:green_circle: ${PATH_TO.BEET} exists`)
 
     const requirementstxt = fs.readFileSync(PATH_TO.REQUIREMENTS, { encoding: "utf-8" })
-    core.info(requirementstxt)
-
-    core.info(`includes beet: ${requirementstxt.includes("beet")}`)
-    core.info(`char codes: ${[...requirementstxt.slice(0, 5)].map(c => c.charCodeAt(0))}`)
-
     if (!requirementstxt.includes("beet")) {
         const err = new Error(`beet is not in ${PATH_TO.REQUIREMENTS}`)
         core.setFailed(err)
         throw err
     }
+    core.info(`:green_circle: requirements.txt has beet`)
 
-
-    core.info("ran validate.js")
+    core.info(":white_check_mark: Successfully validated")
 } catch (error) {
     core.setFailed(error.message)
     process.exit(1)

@@ -28099,19 +28099,6 @@ var ExitCode;
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
 /**
- * Gets the value of an input.
- * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
- * Returns an empty string if the value is not defined.
- *
- * @param     name     name of the input to get
- * @param     options  optional. See InputOptions.
- * @returns   string
- */
-function getInput(name, options) {
-    const val = process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '';
-    return val.trim();
-}
-/**
  * Sets the value of an output.
  *
  * @param     name     name of the output to set
@@ -28164,12 +28151,10 @@ function info(message) {
 
 try {
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"];
-    const BEET_DIR = getInput("beet-dir");
+    const BEET_DIR = process.env["BEET_DIR"];
     info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
 
-    const beet = spawn('beet', [
-      'build'
-    ], { cwd: BEET_DIR });
+    const beet = spawn('beet', ['build'], { cwd: BEET_DIR });
 
     beet.stdout.on('data', (data) => {
       info(`🔵 BEET | ${data}`);

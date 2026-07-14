@@ -43,6 +43,8 @@ runs:
     - name: "Validate project"
       id: validate-project
       shell: bash
+      env:
+        BEET_DIR: ${{ inputs.beet-dir }} 
       run: node ${{ github.action_path }}/dist/validate.js
 
     - name: "Install beet and dependencies"

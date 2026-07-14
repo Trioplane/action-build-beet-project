@@ -1,6 +1,6 @@
 {
   "name": "action-build-beet-project",
-  "version": "4.0.0",
+  "version": "5.0.0-beta2",
   "description": "Builds a beet project and provides exposed outputs to get the files",
   "author": "trplnr",
   "license": "MIT",

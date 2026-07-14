@@ -4,7 +4,7 @@ import * as fs from "fs"
 import * as path from "path"
 
 try {
-    const BEET_DIR = core.getInput('beet-dir')
+    const BEET_DIR = process.env["BEET_DIR"]
     const PATH_TO = {
         REQUIREMENTS: path.join(BEET_DIR, "requirements.txt"),
         BEETJSON: path.join(BEET_DIR, "beet.json"),
@@ -14,7 +14,6 @@ try {
     }
 
     core.info(`🟡 Checking for ${PATH_TO.REQUIREMENTS}`)
-    core.info(`🟡 AAAAAAAAAAAAAA ${BEET_DIR} | ${PATH_TO.REQUIREMENTS} | ${path.join(BEET_DIR, "requirements.txt")}`)
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
         const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist`)
         core.setFailed(err)

@@ -28099,19 +28099,6 @@ var ExitCode;
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
 /**
- * Gets the value of an input.
- * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
- * Returns an empty string if the value is not defined.
- *
- * @param     name     name of the input to get
- * @param     options  optional. See InputOptions.
- * @returns   string
- */
-function getInput(name, options) {
-    const val = process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '';
-    return val.trim();
-}
-/**
  * Sets the value of an output.
  *
  * @param     name     name of the output to set
@@ -33052,7 +33039,7 @@ Octokit.plugin(restEndpointMethods, paginateRest).defaults(defaults);
 new Context();
 
 try {
-    const BEET_DIR = getInput('beet-dir');
+    const BEET_DIR = process.env["BEET_DIR"];
     const PATH_TO = {
         REQUIREMENTS: path.join(BEET_DIR, "requirements.txt"),
         BEETJSON: path.join(BEET_DIR, "beet.json"),
@@ -33062,7 +33049,6 @@ try {
     };
 
     info(`🟡 Checking for ${PATH_TO.REQUIREMENTS}`);
-    info(`🟡 AAAAAAAAAAAAAA ${BEET_DIR} | ${PATH_TO.REQUIREMENTS} | ${path.join(BEET_DIR, "requirements.txt")}`);
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
         const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist`);
         setFailed(err);

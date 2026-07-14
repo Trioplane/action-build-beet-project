@@ -28168,9 +28168,7 @@ try {
     info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`);
 
     const beet = spawn('beet', [
-      'build',
-      '-s', 'data_pack.zipped=true',
-      '-s', 'resource_pack.zipped=true'
+      'build'
     ], { cwd: BEET_DIR });
 
     beet.stdout.on('data', (data) => {

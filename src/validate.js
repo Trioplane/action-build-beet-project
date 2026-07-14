@@ -14,6 +14,7 @@ try {
     }
 
     core.info(`🟡 Checking for ${PATH_TO.REQUIREMENTS}`)
+    core.info(`🟡 AAAAAAAAAAAAAA ${BEET_DIR} | ${PATH_TO.REQUIREMENTS} | ${path.join(BEET_DIR, "requirements.txt")}`)
     if (!fs.existsSync(PATH_TO.REQUIREMENTS)) {
         const err = new Error(`${PATH_TO.REQUIREMENTS} does not exist`)
         core.setFailed(err)

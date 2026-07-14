@@ -1,5 +1,4 @@
 import * as core from "@actions/core"
-import * as github from "@actions/github"
 import { spawn } from "child_process"
 import { once } from "events"
 import * as fs from "fs"
@@ -7,9 +6,14 @@ import path from "path"
 
 try {
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"]
+    const BEET_DIR = core.getInput("beet-dir")
     core.info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`)
 
-    const beet = spawn('beet', ['build']);
+    const beet = spawn('beet', [
+      'build',
+      '-s', 'data_pack.zipped=true',
+      '-s', 'resource_pack.zipped=true'
+    ], { cwd: BEET_DIR });
 
     beet.stdout.on('data', (data) => {
       core.info(`🔵 BEET | ${data}`);
@@ -20,15 +24,22 @@ try {
     });
 
     const [code] = await once(beet, 'close');
-    core.info(`🔵 child process exited with code ${code}`);
+    if (code !== 0) {
+        core.setFailed(`🔴 beet build failed with exit code ${code}`)
+        process.exit(1)
+    }
+    core.info(`🔵 beet build exited with code ${code}`);
 
-    const OUTPUT_DIR_CONTENTS = fs.readdirSync(BEET_PROJECT_OUTPUT)
+    const outputDir = path.isAbsolute(BEET_PROJECT_OUTPUT)
+      ? BEET_PROJECT_OUTPUT
+      : path.join(BEET_DIR, BEET_PROJECT_OUTPUT)
+    const OUTPUT_DIR_CONTENTS = fs.readdirSync(outputDir)
     const DATA_PACKS = []
     const RESOURCE_PACKS = []
     const UNKNOWN_FILES = []
 
     for (const entry of OUTPUT_DIR_CONTENTS) {
-        const fullPath = path.join(BEET_PROJECT_OUTPUT, entry)
+        const fullPath = path.join(outputDir, entry)
         const stat = fs.statSync(fullPath)
         const name = stat.isFile() ? path.parse(entry).name : entry
 

@@ -33054,7 +33054,7 @@ new Context();
 try {
     const BEET_DIR = getInput('beet-dir');
     const PATH_TO = {
-        REQUIREMENTS: path.join("requirements.txt"),
+        REQUIREMENTS: path.join(BEET_DIR, "requirements.txt"),
         BEETJSON: path.join(BEET_DIR, "beet.json"),
         BEETYAML: path.join(BEET_DIR, "beet.yaml"),
         BEETYML: path.join(BEET_DIR, "beet.yml"),

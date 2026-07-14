@@ -6,12 +6,10 @@ import path from "path"
 
 try {
     const BEET_PROJECT_OUTPUT = process.env["BEET_PROJECT_OUTPUT"]
-    const BEET_DIR = core.getInput("beet-dir")
+    const BEET_DIR = process.env["BEET_DIR"]
     core.info(`🔵 BEET_PROJECT_OUTPUT: ${BEET_PROJECT_OUTPUT}`)
 
-    const beet = spawn('beet', [
-      'build'
-    ], { cwd: BEET_DIR });
+    const beet = spawn('beet', ['build'], { cwd: BEET_DIR });
 
     beet.stdout.on('data', (data) => {
       core.info(`🔵 BEET | ${data}`);

@@ -69,4 +69,5 @@ runs:
       shell: bash
       run: node ${{ github.action_path }}/dist/build.js
       env:
+        BEET_DIR: ${{ inputs.beet-dir }} 
         BEET_PROJECT_OUTPUT: ${{ steps.read-beet-config.outputs.output }}
